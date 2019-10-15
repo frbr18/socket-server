@@ -7,6 +7,10 @@ let users = [];
 let messages = [];
 let index = 0;
 
+app.get("/", (req, res) => {
+    res.send("It works");
+});
+
 io.on('connection', socket => {
     socket.emit('loggedIn', {
         users: users.map(user => user.username),
