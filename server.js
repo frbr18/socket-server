@@ -41,6 +41,6 @@ io.on('connection', socket => {
     });
 });
 
-http.listen(3000, () => {
-    console.log("Server listening on port 3000");
+http.listen(8334, () => {
+    console.log("Server listening on port 8334");
 });
