@@ -1,15 +1,28 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
+app.use(cors());
+app.options('*', cors());
+app.disable('x-powered-by');
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
+
+const bodyParser = require("body-parser");
+
+//routers
+const msgApi = require("./routes/msg-api");
 
 let users = [];
 let messages = [];
 let index = 0;
 
-app.get("/", (req, res) => {
-    res.send("It works");
-});
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use('/api', msgApi);
+
+io.origins(['https://me-client.frbr18-jsramverk.me/#/chat:443']);
+io.origins(['https://me-client.frbr18-jsramverk.me:443']);
 
 io.on('connection', socket => {
     socket.emit('loggedIn', {
