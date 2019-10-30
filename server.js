@@ -13,18 +13,17 @@ const bodyParser = require("body-parser");
 const msgApi = require("./routes/msg-api");
 
 let users = [];
-let messages = [];
+
 let index = 0;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/api', msgApi);
-
-io.origins(['https://me-client.frbr18-jsramverk.me/#/chat:443']);
-io.origins(['https://me-client.frbr18-jsramverk.me:443']);
+app.use('/msg', msgApi);
+//io.origins(['https://me-client.frbr18-jsramverk.me:443/']);
 
 io.on('connection', socket => {
+    let messages = [];
     socket.emit('loggedIn', {
         users: users.map(user => user.username),
         messages: messages
@@ -33,6 +32,7 @@ io.on('connection', socket => {
     socket.on('newuser', username => {
         console.log(`${username} har anslutit.`);
         socket.username = username;
+        socket.messages = [];
         users.push(socket);
         io.emit('userOnline', socket.username);
     });
